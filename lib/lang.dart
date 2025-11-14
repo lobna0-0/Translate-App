@@ -101,30 +101,45 @@ class Match {
   });
 
   factory Match.fromJson(Map<String, dynamic> json) {
+    double _toDouble(dynamic value, String fieldName) {
+      try {
+        if (value == null) return 0.0;
+        if (value is num) return value.toDouble();
+        return double.tryParse(value.toString()) ?? 0.0;
+      } catch (e) {
+        print("⚠️ Error converting $fieldName=$value to double");
+        return 0.0;
+      }
+    }
+
+    int _toInt(dynamic value, String fieldName) {
+      try {
+        if (value == null) return 0;
+        if (value is int) return value;
+        return int.tryParse(value.toString()) ?? 0;
+      } catch (e) {
+        print("⚠️ Error converting $fieldName=$value to int");
+        return 0;
+      }
+    }
+
     return Match(
-      id: json['id'].toString(),
+      id: json['id']?.toString() ?? '',
       segment: json['segment'] ?? '',
       translation: json['translation'] ?? '',
       source: json['source'] ?? '',
       target: json['target'] ?? '',
-      quality: (json['quality'] is num)
-          ? (json['quality'] as num).toDouble()
-          : double.tryParse(json['quality'].toString()) ?? 0.0,
+      quality: _toDouble(json['quality'], 'quality'),
       reference: json['reference'],
-      usageCount: json['usage-count'] ?? 0,
+      usageCount: _toInt(json['usage-count'], 'usage-count'),
       subject: json['subject'] ?? '',
       createdBy: json['created-by'] ?? '',
       lastUpdatedBy: json['last-updated-by'] ?? '',
-      createDate:
-          DateTime.tryParse(json['create-date'] ?? '') ?? DateTime.now(),
+      createDate: DateTime.tryParse(json['create-date'] ?? '') ?? DateTime.now(),
       lastUpdateDate:
           DateTime.tryParse(json['last-update-date'] ?? '') ?? DateTime.now(),
-      match: (json['match'] is num)
-          ? (json['match'] as num).toDouble()
-          : double.tryParse(json['match'].toString()) ?? 0.0,
-      penalty: (json['penalty'] is num)
-          ? (json['penalty'] as num).toDouble()
-          : double.tryParse(json['penalty'].toString()) ?? 0.0,
+      match: _toDouble(json['match'], 'match'),
+      penalty: _toDouble(json['penalty'], 'penalty'),
     );
   }
 }
@@ -142,11 +157,20 @@ class ResponseData {
   });
 
   factory ResponseData.fromJson(Map<String, dynamic> json) {
+    double _toDouble(dynamic value, String fieldName) {
+      try {
+        if (value == null) return 0.0;
+        if (value is num) return value.toDouble();
+        return double.tryParse(value.toString()) ?? 0.0;
+      } catch (e) {
+        print("⚠️ Error converting $fieldName=$value to double");
+        return 0.0;
+      }
+    }
+
     return ResponseData(
       translatedText: json['translatedText'] ?? '',
-      match: (json['match'] is num)
-          ? (json['match'] as num).toDouble()
-          : double.tryParse(json['match'].toString()) ?? 0.0,
+      match: _toDouble(json['match'], 'match'),
     );
   }
 }
